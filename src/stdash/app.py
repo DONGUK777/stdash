@@ -31,7 +31,6 @@ plt.plot(df_pre.index,df_pre['num'], 'green')
 plt.xlabel('DateTime')
 plt.ylabel('Count Requests')
 plt.xticks(rotation = 45)
-st.pyplot(plt)
 
 # 화면에 그리기
-#st.pyplot(plt)
+st.pyplot(plt)
