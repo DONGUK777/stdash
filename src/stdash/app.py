@@ -27,7 +27,7 @@ df['pre_time'] = df['prediction_time'].dt.strftime('%Y-%m-%d %H')
 df_pre = df.groupby('pre_time').count()
 
 plt.bar(df_req.index, df_req['num'], color='orange')
-plt.plot(df_pre.index,df_pre['num'], 'green')
+plt.plot(df_pre.index,df_pre['num'], 'green', marker='o')
 plt.xlabel('DateTime')
 plt.ylabel('Count Requests')
 plt.xticks(rotation = 45)
