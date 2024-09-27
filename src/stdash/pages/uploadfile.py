@@ -4,15 +4,13 @@ import requests
 
 # 새 페이지: 이미지 업로드 및 분류
 def image_classification_page():
-    st.title("Hotdog or Not Hotdog")
+    st.title("Hotdog🌭 or Not Hotdog🐶")
 
     # 파일 업로드 컴포넌트
     uploaded_file = st.file_uploader("Upload your image", type=["jpg", "png", "jpeg"])
 
     if uploaded_file is not None:
         # 업로드한 이미지 표시
-        st.write("업로드 이미지:")
-        
         # 이미지를 FastAPI 서버로 전송
         files = {"file": uploaded_file.getvalue()}
         response = requests.post("http://localhost:8000/uploadfile/", files=files)
@@ -21,7 +19,6 @@ def image_classification_page():
             # FastAPI로부터 받은 분류 결과 출력
             result = response.json()
             label = result["label"]
-
             # 결과에 따라 비교 표시
             expected_label = "hot dog"  # 업로드한 이미지가 실제 hot dog인지 예측 결과와 비교
             result_image = ""
@@ -45,8 +42,10 @@ def image_classification_page():
 
             with col3:
                 st.image(result_image, caption="Result", use_column_width=True)
+            st.success(f"결과: {result['label']} (신뢰도: 약 {result['score']:.2f})")
         else:
             st.error("이미지 분류 중 오류가 발생했습니다.")
-
+    else:
+        st.warning("파일을 업로드해주세요.")
 image_classification_page()
 

@@ -7,7 +7,6 @@ import numpy as np
 import os
 
 st.markdown("# Second 🐶")
-st.sidebar.markdown("# Second 🐶")
 
 def load_data():
     DB = os.getenv('DB')
