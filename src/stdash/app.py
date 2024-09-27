@@ -95,10 +95,12 @@ with tab3:
     plt.xlabel('DateTime')
     plt.ylabel('Count')
     plt.xticks(rotation = 45)
-    st.pyplot(plt)
-
+    
     # 불균형 정보 데이터프레임 출력
     st.write(df_dif[['num_of_requests', 'num_of_predictions', 'difference', 'missing_info']])
+    
+    st.pyplot(plt)
+
 
 with tab4:
     
