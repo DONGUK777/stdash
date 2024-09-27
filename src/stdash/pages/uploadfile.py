@@ -4,7 +4,7 @@ import requests
 
 # 새 페이지: 이미지 업로드 및 분류
 def image_classification_page():
-    st.title("Hotdog or Not Hotdog")
+    st.title("Hotdog🌭 or Not Hotdog🐶")
 
     # 파일 업로드 컴포넌트
     uploaded_file = st.file_uploader("Upload your image", type=["jpg", "png", "jpeg"])
