@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY src/stdash/app.py /app/
-RUN pip install git+https://github.com/DONGUK777/stdash.git@0.3/docker
+RUN pip install git+https://github.com/DONGUK777/stdash.git@main
 
 EXPOSE 8501
 
