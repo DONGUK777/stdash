@@ -46,6 +46,6 @@ def image_classification_page():
         else:
             st.error("이미지 분류 중 오류가 발생했습니다.")
     else:
-        st.warning("파일을 업로드해주세요.")
+        st.warning("이미지 파일을 업로드해주세요.")
 image_classification_page()
 
