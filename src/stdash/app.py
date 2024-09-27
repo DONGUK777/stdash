@@ -86,7 +86,10 @@ with tab3:
         df_dif['difference'] < 0   # 처리 누락
     ]
     choices = ['과다 요청', '처리 누락']
-
+    
+    # 불균형 정보 데이터프레임 출력
+    st.write(df_dif[['num_of_requests', 'num_of_predictions', 'difference', 'missing_info']])
+    
     df_dif['missing_info'] = np.select(conditions, choices, '정상 처리')
     plt.figure(figsize=(10, 6))
     plt.bar(df_dif.index, df_dif['difference'], color=colors)
@@ -95,9 +98,6 @@ with tab3:
     plt.xlabel('DateTime')
     plt.ylabel('Count')
     plt.xticks(rotation = 45)
-    
-    # 불균형 정보 데이터프레임 출력
-    st.write(df_dif[['num_of_requests', 'num_of_predictions', 'difference', 'missing_info']])
     
     st.pyplot(plt)
 
