@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 
+
 # 새 페이지: 이미지 업로드 및 분류
 def image_classification_page():
     st.title("Hotdog or Not Hotdog")
