@@ -15,7 +15,6 @@ def load_data():
     return d
 
 st.markdown("# First 🌭")
-st.sidebar.markdown("# First 🌭")
 
 data = load_data()
 df = pd.DataFrame(data)

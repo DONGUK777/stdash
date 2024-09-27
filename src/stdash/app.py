@@ -23,5 +23,8 @@ st.title("📊 Streamlit Dashboard")
 st.subheader("Welcome to my Streamlit Analysis Dashboard!")
 st.markdown("""
 이 대시보드는 이미지 처리 시스템의 요청/처리 결과를 나타냅니다.
+""")
+
+st.markdown("""
 왼쪽 사이드바를 통해 다양한 분석과 분석 항목을 확인할 수 있습니다.
 """)
