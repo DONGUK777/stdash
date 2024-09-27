@@ -8,14 +8,8 @@ import os
 
 
 st.title('CNN JOB MON')
-st.header('왼쪽의 버튼을 클릭하세요')
-st.header('목차')
-st.subheader('First')
-st.subheader('Second')
 
 # 탭 생성 : 첫번째 탭의 이름은 Tab A 로, Tab B로 표시합니다. 
-tab1, tab2,= st.tabs(['시간 당 요청 수', '시간 당 요청 및 처리 건수'])
-tab3, tab4 = st.tabs(['요청 및 처리의 차이', 'USER별 불균형 확인'])
 def load_data():
     DB = os.getenv('DB')
     DB_PORT =os.getenv('DB_PORT')
@@ -24,7 +18,7 @@ def load_data():
     d = r.json()
     return d
 
-st.sidebar.title('🐵DONGUK777 Analysis🤖')
+st.sidebar.title('🐵Welcome🤖')
 
 data = load_data()
 df = pd.DataFrame(data)
@@ -39,7 +33,31 @@ df['prediction_time'] = pd.to_datetime(df['prediction_time'])
 df['pre_time'] = df['prediction_time'].dt.strftime('%Y-%m-%d %H')
 df_pre = df.groupby('pre_time').count()
 
+
+# 요청 시간과 처리 시간을 합쳐서 계산할 데이터프레임 생성
+all_times = sorted(list(set(df_req.index).union(df_pre.index)))  # 모든 시간대를 포함하는 정렬된 리스트 생성
+df_dif = pd.DataFrame(index=all_times)  # 정렬된 시간 리스트를 인덱스로 사용
+df_dif['num_of_requests'] = df_req['num']
+df_dif['num_of_predictions'] = df_pre['num']
+
+# NaN 값을 0으로 대체 (데이터가 없는 시간은 0으로 처리)
+df_dif.fillna(0, inplace=True)
+
+# 요청과 처리 차이 계산
+df_dif['difference'] = df_dif['num_of_requests'] - df_dif['num_of_predictions']
+
+# 누락된 주체 확인
+# 요청수가 더 많으면 red, 처리수가 더 많으면 bule
+colors = ['orange' if x > 0 else 'steelblue' for x in df_dif['difference']]
+
+conditions = [
+    df_dif['difference'] > 0,  # 과다 요청
+    df_dif['difference'] < 0   # 처리 누락
+]
+choices = ['과다 요청', '처리 누락']
+
 def step1():
+    tab1, tab2,= st.tabs(['시간 당 요청 수', '시간 당 요청 및 처리 건수'])
     with tab1:
         plt.figure(figsize=(10, 6))
         bars1 = plt.bar(df_req.index, df_req['num'], color='steelblue')
@@ -69,32 +87,8 @@ if st.sidebar.button('First'):
     step1()        
 
 def step2():
+    tab3, tab4 = st.tabs(['요청 및 처리의 차이', 'USER별 불균형 확인'])
     with tab3:
-        
-        # 요청 시간과 처리 시간을 합쳐서 계산할 데이터프레임 생성
-        all_times = sorted(list(set(df_req.index).union(df_pre.index)))  # 모든 시간대를 포함하는 정렬된 리스트 생성
-        df_dif = pd.DataFrame(index=all_times)  # 정렬된 시간 리스트를 인덱스로 사용
-        df_dif['num_of_requests'] = df_req['num']
-        df_dif['num_of_predictions'] = df_pre['num']
-
-        # NaN 값을 0으로 대체 (데이터가 없는 시간은 0으로 처리)
-        df_dif.fillna(0, inplace=True)
-
-        # 요청과 처리 차이 계산
-        df_dif['difference'] = df_dif['num_of_requests'] - df_dif['num_of_predictions']
-
-        # 누락된 주체 확인
-        # 요청수가 더 많으면 red, 처리수가 더 많으면 bule
-        colors = ['orange' if x > 0 else 'steelblue' for x in df_dif['difference']]
-
-        conditions = [
-            df_dif['difference'] > 0,  # 과다 요청
-            df_dif['difference'] < 0   # 처리 누락
-        ]
-        choices = ['과다 요청', '처리 누락']
-        
-        # 불균형 정보 데이터프레임 출력
-        st.write(df_dif[['num_of_requests', 'num_of_predictions', 'difference', 'missing_info']])
         
         df_dif['missing_info'] = np.select(conditions, choices, '정상 처리')
         plt.figure(figsize=(10, 6))
@@ -105,6 +99,9 @@ def step2():
         plt.ylabel('Count')
         plt.xticks(rotation = 45)
         
+        # 불균형 정보 데이터프레임 출력
+        st.write(df_dif[['num_of_requests', 'num_of_predictions', 'difference', 'missing_info']])
+
         st.pyplot(plt)
 
 
