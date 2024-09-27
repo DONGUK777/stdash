@@ -16,7 +16,7 @@ tab1, tab2, tab3, tab4 = st.tabs([
                                 ])
 
 def load_data():
-    DB = so.getenv('DB')
+    DB = os.getenv('DB')
     DB_PORT =os.getenv('DB_PORT')
     url = f'http://{DB}:{DB_PORT}/all'
     r = requests.get(url)
